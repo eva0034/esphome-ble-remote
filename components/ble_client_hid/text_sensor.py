@@ -11,7 +11,7 @@ TextSensor = text_sensor.text_sensor_ns.class_(
 )
 
 CONFIG_SCHEMA = cv.All(
-    text_sensor.TEXT_SENSOR_SCHEMA.extend(
+    text_sensor._TEXT_SENSOR_SCHEMA.extend(
         {
             cv.GenerateID(): cv.declare_id(TextSensor)
         }
