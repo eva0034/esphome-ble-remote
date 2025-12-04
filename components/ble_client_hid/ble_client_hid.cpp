@@ -14,13 +14,16 @@ static const std::string EMPTY = "";
 void BLEClientHID::loop() {
   switch (this->hid_state) {
     case HIDState::BLE_CONNECTED:
-      this->read_client_characteristics(); //not instant, finished when hid_state = HIDState::READ_CHARS
+      this->read_client_characteristics();  // not instant, finished when
+                                            // hid_state = HIDState::READ_CHARS
       this->hid_state = HIDState::READING_CHARS;
       break;
     case HIDState::READ_CHARS:
-      this->configure_hid_client();  // instant
-      this->hid_state = HIDState::CONFIGURED;
-      this->node_state = espbt::ClientState::ESTABLISHED;
+      this->configure_hid_client();
+      this->hid_state = HIDState::NOTIFICATIONS_REGISTERING;
+    case HIDState::NOTIFICATIONS_REGISTERED:
+      esp_ble_gap_update_conn_params(&this->preferred_conn_params);
+      this->hid_state = HIDState::CONN_PARAMS_UPDATING;
     default:
       break;
   }
